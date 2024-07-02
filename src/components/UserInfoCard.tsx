@@ -1,8 +1,18 @@
+import { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const UserInfoCard = ({ userId }: { userId: string }) => {
+const UserInfoCard = ({ user }: { user: User }) => {
+  const createdAtDate = new Date(user.createdAt);
+  const formattedDate = createdAtDate.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  let isUserBlocked = false;
+  let isFollowing = false;
+  let isFollowingSent = false;
   return (
     <div className="p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-4">
       {/* top */}
@@ -15,42 +25,50 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
       {/* bottom */}
       <div className="flex flex-col gap-4 text-gray-500">
         <div className="flex items-center gap-2">
-          <span className="text-xl text-black">user shorname</span>
-          <span className="text-sm">username</span>
-        </div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-          quam iusto nostrum error, esse quae accusamus voluptate expedita
-          veritatis, tempore eum asperiores nisi{" "}
-        </p>
-        <div className="flex items-center gap-2">
-          <Image src="/map.png" width={16} height={16} alt="city" />
-          <span>
-            Living in <b className="">India</b>
+          <span className="text-xl text-black">
+            {user.name && user.surname
+              ? user.name + " " + user.surname
+              : user.username}
           </span>
+          <span className="text-sm">{user.username}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Image src="/school.png" width={16} height={16} alt="school" />
-          <span>
-            Went to <b className="">UGHS,Lingmarni</b>
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Image src="/work.png" width={16} height={16} alt="work" />
-          <span>
-            Work at <b className="">Hyderabad</b>
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex gap-1 items-center">
-            <Image src="/link.png" width={16} height={16} alt="link" />
-            <Link href="#" className="text-blue-500 font-medium">
-              Tarun.com
-            </Link>
+        {user.description && <p>{user.description}</p>}
+        {user.city && (
+          <div className="flex items-center gap-2">
+            <Image src="/map.png" width={16} height={16} alt="city" />
+            <span>
+              Living in <b className="">India</b>
+            </span>
           </div>
+        )}
+        {user.school && (
+          <div className="flex items-center gap-2">
+            <Image src="/school.png" width={16} height={16} alt="school" />
+            <span>
+              Went to <b className="">UGHS,Lingmarni</b>
+            </span>
+          </div>
+        )}
+        {user.work && (
+          <div className="flex items-center gap-2">
+            <Image src="/work.png" width={16} height={16} alt="work" />
+            <span>
+              Work at <b className="">{user.work}</b>
+            </span>
+          </div>
+        )}
+        <div className="flex items-center justify-between">
+          {user.website && (
+            <div className="flex gap-1 items-center">
+              <Image src="/link.png" width={16} height={16} alt="link" />
+              <Link href="#" className="text-blue-500 font-medium">
+                {user.website}
+              </Link>
+            </div>
+          )}
           <div className="flex gap-1 items-center">
             <Image src="/date.png" width={16} height={16} alt="link" />
-            <span>Joined Novembar 2024</span>
+            <span>Joined {formattedDate}</span>
           </div>
         </div>
         <button className="bg-blue-500 text-white text-sm rounded-md p-2">
