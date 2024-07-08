@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ProfileCard from "./ProfileCard";
 import { menuItems } from "@/constants";
-import Add from "./Add";
+import Add from "../Add";
 
 const LeftMenu = ({ type }: { type: "home" | "profile" }) => {
   return (
